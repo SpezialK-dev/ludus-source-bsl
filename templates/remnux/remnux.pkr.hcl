@@ -97,29 +97,11 @@ locals {
 
 source "proxmox-iso" "remnux" {
   boot_command = [
-    "<esc><wait>",
-    "<esc><wait>",
-    "<enter><wait>",
-    "/install/vmlinuz <wait>",
-    "auto <wait>",
-    "console-setup/ask_detect=false ",
-    "debconf/frontend=noninteractive ",
-    "debian-installer=en_US ",
-    "fb=false ",
-    "hostname=remnux ",
-    "initrd=/install/initrd.gz ",
-    "kbd-chooser/method=us ",
-    "keyboard-configuration/modelcode=SKIP ",
-    "keyboard-configuration/layout=USA ",
-    "keyboard-configuration/variant=USA ",
-    "locale=en_US ",
-    "passwd/username=localuser ",
-    "passwd/user-fullname=localuser ",
-    "passwd/user-password=password ",
-    "passwd/user-password-again=password ",
-    "noapic ",
-    "preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/remnux.cfg ",
-    " -- <enter>"
+    "e<down><down><down><end><wait>",
+    " autoinstall<wait>",
+    " ds='nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/'",
+    "<wait10>",
+    "<F10>"
   ]
   boot_key_interval      = "20ms"
   boot_keygroup_interval = "20ms"
