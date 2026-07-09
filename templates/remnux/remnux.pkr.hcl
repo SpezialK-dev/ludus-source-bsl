@@ -103,8 +103,8 @@ source "proxmox-iso" "remnux" {
     "<wait10>",
     "<F10>"
   ]
-  boot_key_interval      = "20ms"
-  boot_keygroup_interval = "20ms"
+  boot_key_interval      = "100ms"
+  boot_keygroup_interval = "2s"
   http_directory         = "./http"
 
   communicator    = "ssh"
