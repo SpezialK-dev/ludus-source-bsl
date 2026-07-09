@@ -10,7 +10,7 @@ variable "icon_path" {
 
 variable "iso_checksum" {
   type    = string
-  default = "sha256:c2e6f4dc37ac944e2ed507f87c6188dd4d3179bf4a3f9e110d3c88d1f3294bdc"
+  default = "sha256:d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
 }
 
 # The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, win11, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
@@ -21,7 +21,7 @@ variable "os" {
 
 variable "iso_url" {
   type    = string
-  default = "https://old-releases.ubuntu.com/releases/24.04/ubuntu-24.04.1-desktop-amd64.iso"
+  default = "https://old-releases.ubuntu.com/releases/24.04.2/ubuntu-24.04.2-live-server-amd64.iso"
 }
 
 variable "vm_cpu_cores" {
@@ -146,14 +146,23 @@ source "proxmox-iso" "remnux" {
 build {
   sources = ["source.proxmox-iso.remnux"]
 
-  provisioner "ansible" {
-    playbook_file = "ansible/post-boot-config.yml"
-    use_proxy     = false
-    user = "${var.ssh_username}"
-    extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
-    ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
-    skip_version_check = true
-  }
+provisioner "ansible" {
+  playbook_file = "ansible/reset-machine-id.yml"
+  use_proxy     = false
+  user = "${var.ssh_username}"
+  extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
+  ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
+  skip_version_check = true
+}
+
+provisioner "ansible" {
+  playbook_file = "ansible/reset-ssh-host-keys.yml"
+  use_proxy     = false
+  user = "${var.ssh_username}"
+  extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
+  ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
+  skip_version_check = true
+}
 
   provisioner "ansible" {
     playbook_file = "ansible/install-remnux.yml"

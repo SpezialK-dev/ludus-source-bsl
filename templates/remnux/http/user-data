@@ -1,6 +1,6 @@
 #cloud-config
 #
-# Cloud Init user-data config. 
+# Cloud Init user-data config.
 # Do not alter first line of this file.
 # https://cloudinit.readthedocs.io/en/latest/
 autoinstall:
